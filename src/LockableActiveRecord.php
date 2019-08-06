@@ -31,6 +31,16 @@ class LockableActiveRecord extends Behavior
         parent::attach($owner);
     }
 
+    // TODO findAll & findOne with complex condition
+    public static function findOneForUpdate(int $id): ?ActiveRecord
+    {
+        $sql = self::find()
+            ->where(['id' => $id])
+            ->createCommand()
+            ->getRawSql();
+        return self::findBySql($sql . ' FOR UPDATE')->one();
+    }
+
     /**
      * @param string $mode
      * @throws \yii\db\Exception
